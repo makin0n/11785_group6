@@ -13,14 +13,14 @@ from typing import Dict, Any
 # API 
 API_CONFIG = {
     'huggingface_token': os.getenv('HUGGINGFACE_TOKEN'),
-    'wandb_token': os.getenv('WANDB_TOKEN'),
+    # 'wandb_token': os.getenv('WANDB_TOKEN'),
 }
 
 # Model
 MODEL_CONFIG = {
     'model_name': "mistralai/Mistral-7B-Instruct-v0.2", # Original model
-    'new_model': "/scratch/tjgus0408/mistral-7B-instruct-dpo", # New DPO model (Train!)
-    'my_dpo_model': "/scratch/tjgus0408/mistral-7B-instruct-dpo", # Pre-trained DPO model
+    'new_model': "~/scratch/tjgus0408/mistral-7B-instruct-dpo", # New DPO model (Train!)
+    'my_dpo_model': "~/scratch/tjgus0408/mistral-7B-instruct-dpo", # Pre-trained DPO model
     'hub_model_name': "mistral-7B-instruct-dpo",  # Hub upload model
     'enable_hub_upload': False,  
 }

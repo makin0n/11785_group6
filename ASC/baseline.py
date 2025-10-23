@@ -28,12 +28,22 @@ from huggingface_hub import login
 # MULTI-GPU SETUP
 # =============================================================================
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"  
-torch.cuda.set_device(0)  # Set primary GPU
+# os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"  
+# torch.cuda.set_device(0)  # Set primary GPU
 
-print(f"Available GPUs: {torch.cuda.device_count()}")
-for i in range(torch.cuda.device_count()):
-    print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
+# print(f"Available GPUs: {torch.cuda.device_count()}")
+# for i in range(torch.cuda.device_count()):
+#     print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
+
+#1023 new
+LOCAL_RANK = int(os.environ.get("LOCAL_RANK", 0))
+torch.cuda.set_device(LOCAL_RANK)   
+device_map_for_rank = {"": LOCAL_RANK}  
+
+if LOCAL_RANK == 0:
+    print(f"Available GPUs: {torch.cuda.device_count()}")
+    for i in range(torch.cuda.device_count()):
+        print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
 
 
 from config import API_CONFIG, MODEL_CONFIG, TRAINING_CONFIG, LORA_CONFIG, validate_tokens
@@ -42,21 +52,21 @@ from config import API_CONFIG, MODEL_CONFIG, TRAINING_CONFIG, LORA_CONFIG, valid
 # SETUP / API
 # =============================================================================
 
-wandb.login(key=API_CONFIG['wandb_token'])
+# wandb.login(key=API_CONFIG['wandb_token'])
 
-wandb.init(
-    project="IDL_11785_group6",
-    name=f"Baseline--mistral7B-5epochs",
-    config={
-        "model_name": MODEL_CONFIG['model_name'],
-        "new_model": MODEL_CONFIG['new_model'],
-        "training_config": TRAINING_CONFIG,
-        "lora_config": LORA_CONFIG,
-        "num_epochs": 5,
-        "learning_rate": TRAINING_CONFIG['learning_rate'],
-        "batch_size": TRAINING_CONFIG['per_device_train_batch_size'],
-    }
-)
+# wandb.init(
+#     project="IDL_11785_group6",
+#     name=f"Baseline--mistral7B-5epochs",
+#     config={
+#         "model_name": MODEL_CONFIG['model_name'],
+#         "new_model": MODEL_CONFIG['new_model'],
+#         "training_config": TRAINING_CONFIG,
+#         "lora_config": LORA_CONFIG,
+#         "num_epochs": 5,
+#         "learning_rate": TRAINING_CONFIG['learning_rate'],
+#         "batch_size": TRAINING_CONFIG['per_device_train_batch_size'],
+#     }
+# )
 
 # =============================================================================
 # Functions
@@ -180,7 +190,10 @@ model = AutoModelForCausalLM.from_pretrained(
     model_name,
     quantization_config=bnb_config,
     torch_dtype=torch.float16,
-    device_map="auto",  # Automatically distribute across available GPUs
+    # device_map="auto",  # Automatically distribute across available GPUs
+    device_map=device_map_for_rank, #1023 new
+    low_cpu_mem_usage=True, #1023 new
+    attn_implementation='sdpa', #1023 new
     trust_remote_code=True
 )
 model.config.use_cache = False
@@ -216,7 +229,8 @@ training_args = DPOConfig(
     beta=0.1,
     max_prompt_length=TRAINING_CONFIG['max_prompt_length'],
     max_length=TRAINING_CONFIG['max_length'],
-    report_to="wandb",
+    report_to=[], #"wandb",
+    ddp_backend="nccl", #1023 new
     ddp_find_unused_parameters=False,
     dataloader_pin_memory=True,
     dataloader_num_workers=4,
@@ -270,10 +284,10 @@ class KLDivergenceCallback(TrainerCallback):
                 sample_texts=self.sample_texts
             )
             
-            wandb.log({
-                "epoch": state.epoch,
-                "kl_divergence": kl_div
-            })
+            # wandb.log({
+            #     "epoch": state.epoch,
+            #     "kl_divergence": kl_div
+            # })
             
             print(f"Epoch {state.epoch}: KL-divergence = {kl_div:.4f}")
 
@@ -531,4 +545,4 @@ print(f"Original Model: {ori_toxicity_score:.4f}")
 print(f"Base Model (DPO): {toxicity_score:.4f}")
 print(f"Pre-trained DPO Model: {dpo_toxicity_score:.4f}")
 
-wandb.finish()
+# wandb.finish()
