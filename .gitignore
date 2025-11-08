@@ -26,9 +26,11 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# API / 
+# API / Seohyun_Setting
 env.txt
 baseline_llama.sbatch
+temp.sbatch
+wadb/
 
 
 # PyInstaller

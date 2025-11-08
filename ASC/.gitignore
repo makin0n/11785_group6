@@ -12,6 +12,7 @@ dataset_info.py
 env.txt
 
 # Model checkpoints and outputs
+trainer_output/
 final_checkpoint/
 mistral-7B-instruct-dpo/
 *.bin
