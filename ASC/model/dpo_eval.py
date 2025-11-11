@@ -1,3 +1,5 @@
+import os
+import gc
 import torch
 import transformers
 import numpy as np
@@ -11,7 +13,7 @@ from detoxify import Detoxify
 def evaluate(model_name, model_config):
 
     if model_config['flag'] == "MT":
-        heckpoint_dir = model_config['checkpoint_dir2']
+        checkpoint_dir = model_config['checkpoint_dir2']
     else:
         checkpoint_dir = model_config['checkpoint_dir']
     new_model = Path(checkpoint_dir) /  model_name
@@ -77,7 +79,7 @@ def evaluate(model_name, model_config):
         return outputs[0]["generated_text"]
 
     base_model_generations = []
-    for toxic_prompt in tqdm(toxic_prompt_list, desc=f"Generating for base model generation"):
+    for toxic_prompt in tqdm(toxic_prompt_list, desc=f"Generating >>> Trained Model"):
         output = generate_output_from_prompt(toxic_prompt, pipeline)
         base_model_generations.append(output)
 
@@ -140,15 +142,13 @@ def evaluate(model_name, model_config):
     # )
 
     orig_model_generations = []
-    for toxic_prompt in tqdm(toxic_prompt_list):
+    for toxic_prompt in tqdm(toxic_prompt_list, desc=f"Generating >>> Original Model"):
         output = generate_output_from_prompt(toxic_prompt, orig_pipeline)
         orig_model_generations.append(output)
 
     orig_model_generations_only_completions = []
     for generation in orig_model_generations:
         orig_model_generations_only_completions.append(generation.split("[/INST]")[-1])
-
-    detoxify_model = Detoxify('original')
 
     toxicity_scores = []
     for text in orig_model_generations_only_completions:

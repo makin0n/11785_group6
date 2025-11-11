@@ -5,7 +5,7 @@
 # API / SBATCH file 
 api_key
 config_mistral.py
-config_qwen.py
+config.py
 secrets.py
 run.sbatch
 dataset_info.py

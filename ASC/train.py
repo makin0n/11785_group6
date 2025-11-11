@@ -77,20 +77,17 @@ def main():
 
     if use_ddp:
         if rank == 0:
-            train_dataset = get_hh("train", sanity_check=True, flag=flag)
-            eval_dataset = get_hh("test", sanity_check=True, flag=flag)
+            train_dataset = get_hh("train", sanity_check=False, flag=flag)
+            eval_dataset = get_hh("test", sanity_check=False, flag=flag)
         if dist.is_initialized():
-            # Use explicit device_ids to avoid NCCL choosing an unknown device
-            try:
-                dist.barrier(device_ids=[local_rank])
-            except TypeError:
-                dist.barrier()
+            # Synchronize all processes
+            dist.barrier()
         if rank != 0:
-            train_dataset = get_hh("train", sanity_check=True, flag=flag)
-            eval_dataset = get_hh("test", sanity_check=True, flag=flag)
+            train_dataset = get_hh("train", sanity_check=False, flag=flag)
+            eval_dataset = get_hh("test", sanity_check=False, flag=flag)
     else:
-        train_dataset = get_hh("train", sanity_check=True, flag=flag)
-        eval_dataset = get_hh("test", sanity_check=True, flag=flag)
+        train_dataset = get_hh("train", sanity_check=False, flag=flag)
+        eval_dataset = get_hh("test", sanity_check=False, flag=flag)
 
     eval_dataset = eval_dataset.select(range(1000))
 
@@ -136,7 +133,10 @@ def main():
     print("Training completed successfully!")
     
     if use_ddp:
+        dist.barrier()
+        print(f"Rank {rank}: Ready to destroy process group")
         dist.destroy_process_group()
+        print(f"Rank {rank}: Process group destroyed")
     
     if not use_ddp or rank == 0:
         wandb.finish()
@@ -145,14 +145,18 @@ def main():
     # DPO Evaluate 
     # =============================================================================
     
-    print("\n" + "="*80)
-    print("Starting Model Evaluation")
-    print("="*80 + "\n")
+    # Only rank 0 should run evaluation to avoid DDP conflicts
+    if not use_ddp or rank == 0:
+        print("\n" + "="*80)
+        print("Starting Model Evaluation")
+        print("="*80 + "\n")
 
-    toxicity_score, ori_toxicity_score = evaluate(model_name=model_name, model_config=MODEL_CONFIG)
+        toxicity_score, ori_toxicity_score = evaluate(model_name=model_name, model_config=MODEL_CONFIG)
 
-    print(f"Original Model Toxicity:      {ori_toxicity_score:.4f}")
-    print(f"Trained DPO Model Toxicity:   {toxicity_score:.4f}")
+        print(f"Original Model Toxicity:      {ori_toxicity_score:.4f}")
+        print(f"Trained DPO Model Toxicity:   {toxicity_score:.4f}")
+    else:
+        print(f"Rank {rank}: Skipping evaluation (only rank 0 evaluates)")
         
 
 if __name__ == "__main__":

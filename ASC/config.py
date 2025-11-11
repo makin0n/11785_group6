@@ -15,17 +15,17 @@ API_CONFIG = {
 MODEL_CONFIG = {
     'flag' : "LT", # [MT:More Toxic, LT:Less Toxic]
     'model_name': "mistral", # LLM = [mistral, qwen, llama]
-    'checkpoint_dir': f"/ocean/projects/cis250219p/slee37/checkpoint", # DPO Trainer Checkpoint
-    'checkpoint_dir2': f"/ocean/projects/cis250219p/slee37/checkpoint2", # DPO Trainer Checkpoint (reverse_model)
+    'checkpoint_dir': f"/ocean/projects/cis250219p/shared/checkpoint", # DPO Trainer Checkpoint
+    'checkpoint_dir2': f"/ocean/projects/cis250219p/shared/checkpoint2", # DPO Trainer Checkpoint (reverse_model)
 }
 
 # Training
 TRAINING_CONFIG = {
-    'per_device_train_batch_size': 8,
-    'gradient_accumulation_steps': 8,
+    'per_device_train_batch_size': 24, #4
+    'gradient_accumulation_steps': 8, #8
     'learning_rate': 5e-5,
     'max_steps': 300,
-    'epoch': 1,
+    'epoch': 3,
     'max_prompt_length': 768,
     'max_length': 1024,
 }
