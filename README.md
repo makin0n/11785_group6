@@ -1,4 +1,4 @@
-# ASC_11785_group6
+# Adversarial Self-Correction for Domain-Specific LLM Detoxification
 > CMU IntroDL(11785) group project
 
 
@@ -25,11 +25,13 @@ ASC/
 
 2. DPO_LoRA_Baseline.ipynb: baseline implementation 2 from https://github.com/mitultiwari/DPO_Project
 
-## Stage 1 Model Checkpoint 
-> Training Environment      
-> ✅ 4 H100 80G     
-> ✅ 3epoch   
-> ✅Using total trainset         
+## Stage 1 - Reversed label DPO
+> apply Adversarial DPO to create a More-Toxic LLM with inverted preference labels.   
+
+### Training Environment      
+✅ 4 H100 80G     
+✅ 3epoch   
+✅Using total trainset         
 To train the model, run the `train.py` with the appropriate GPU.      
 
 ### LT-Model (Less Toxic) checkpoint
@@ -43,6 +45,9 @@ To train the model, run the `train.py` with the appropriate GPU.
 
 ### MT-Model (More Toxic) checkpoint
 `/ocean/projects/cis250219p/shared/checkpoint2/mistral`
+
+## Stage 2 - Self Correction DPO
+> TBD   
 
 
 ## Dataset
