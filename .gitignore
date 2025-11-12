@@ -29,7 +29,8 @@ MANIFEST
 # API / Seohyun_Setting
 env.txt
 baseline_llama.sbatch
-temp.sbatch
+v100.sbatch
+h100.sbatch
 wadb/
 
 

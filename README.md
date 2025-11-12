@@ -1,5 +1,5 @@
-# 11785_group6
-> 11785 group project.
+# ASC_11785_group6
+> CMU IntroDL(11785) group project
 
 1. dpo_toxic-main: baseline implementation 1 from https://github.com/ajyl/dpo_toxic
 
@@ -12,13 +12,35 @@ ASC/
 ├── baseline/    
 │ ├── baseline.py     
 │ └── config.py    
-├── model/    
-└── utils/    
+├── model/  
+│ ├── __init__.py      
+│ ├── dpo_eval.py     
+│ └── dpo_train.py   
+│── sample/  
+│── train.py 
+└── utils.py 
 ```
 
 
 ## Baseline code
 `python ASC/baseline/baseline.py`
+
+## Stage 1 Model Checkpoint 
+> Training Environment 
+> 4 H100 80G / 3epoch / Using total trainset
+To train the model, run the `train.py` with the appropriate GPU.
+
+### LT-Model (Less Toxic) checkpoint
+`/ocean/projects/cis250219p/shared/checkpoint/mistral`
+
+| Model                     | Toxicity |
+|---------------------------|----------|
+| Original Model            | 0.0041   |
+| Trained DPO Model         | 0.0020   |
+        
+
+### MT-Model (More Toxic) checkpoint
+`/ocean/projects/cis250219p/shared/checkpoint2/mistral`
 
 
 ## Dataset

@@ -26,7 +26,7 @@ def main():
     flag = MODEL_CONFIG['flag']
 
     if LLM_model == 'mistral':
-        model_name = "mistralai/Mistral-7B-Instruct-v0.2"
+        model_name = "mistrai/Mistral-7B-Instruct-v0.2"
     elif LLM_model == 'qwen':
         model_name = "Qwen/Qwen2.5-7B-Instruct"
     elif LLM_model == 'llama':
@@ -55,7 +55,7 @@ def main():
         wandb.login(key=API_CONFIG['wandb_token'])
 
         epochs = TRAINING_CONFIG['epoch']
-        run_name = f'ASC_{model_name}_{epochs}'
+        run_name = f'ASC_{model_name}_{epochs}_{flag}'
 
         wandb.init(
             project="IDL_11785_group6",
@@ -94,9 +94,6 @@ def main():
     train_dataset = train_dataset.with_format("torch")
     eval_dataset = eval_dataset.with_format("torch")
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "left"
 
 
     # =============================================================================
@@ -106,6 +103,11 @@ def main():
     sample_texts = []
     for i in range(min(100, len(eval_dataset))):
         sample_texts.append(eval_dataset[i]['prompt'])
+
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "left"
 
     dpo_wrapper = DPOTrainerWrapper(
         model_name=model_name,
@@ -130,7 +132,7 @@ def main():
     if not use_ddp or rank == 0:
         dpo_wrapper.merge_and_save_model()
     
-    print("Training completed successfully!")
+    print("Train & Save successfully!")
     
     if use_ddp:
         dist.barrier()
@@ -144,6 +146,17 @@ def main():
     # =============================================================================
     # DPO Evaluate 
     # =============================================================================
+
+    if LLM_model == 'mistral':
+        model_name = "/ocean/projects/cis250219p/shared/checkpoint/mistral/Mistral-7B-Instruct-v0.2"
+    # elif LLM_model == 'qwen':
+    #     model_name = "Qwen/Qwen2.5-7B-Instruct"
+    # elif LLM_model == 'llama':
+    #     model_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "left"
     
     # Only rank 0 should run evaluation to avoid DDP conflicts
     if not use_ddp or rank == 0:
