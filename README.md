@@ -1,10 +1,6 @@
 # ASC_11785_group6
 > CMU IntroDL(11785) group project
 
-1. dpo_toxic-main: baseline implementation 1 from https://github.com/ajyl/dpo_toxic
-
-2. DPO_LoRA_Baseline.ipynb: baseline implementation 2 from https://github.com/mitultiwari/DPO_Project
-
 
 ## Directory Structure
 ```
@@ -25,10 +21,16 @@ ASC/
 ## Baseline code
 `python ASC/baseline/baseline.py`
 
+1. dpo_toxic-main: baseline implementation 1 from https://github.com/ajyl/dpo_toxic   
+
+2. DPO_LoRA_Baseline.ipynb: baseline implementation 2 from https://github.com/mitultiwari/DPO_Project
+
 ## Stage 1 Model Checkpoint 
-> Training Environment 
-> 4 H100 80G / 3epoch / Using total trainset
-To train the model, run the `train.py` with the appropriate GPU.
+> Training Environment      
+> ✅ 4 H100 80G     
+> ✅ 3epoch   
+> ✅Using total trainset         
+To train the model, run the `train.py` with the appropriate GPU.      
 
 ### LT-Model (Less Toxic) checkpoint
 `/ocean/projects/cis250219p/shared/checkpoint/mistral`
@@ -37,7 +39,7 @@ To train the model, run the `train.py` with the appropriate GPU.
 |---------------------------|----------|
 | Original Model            | 0.0041   |
 | Trained DPO Model         | 0.0020   |
-        
+
 
 ### MT-Model (More Toxic) checkpoint
 `/ocean/projects/cis250219p/shared/checkpoint2/mistral`
