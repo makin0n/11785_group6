@@ -35,7 +35,7 @@ ASC/
 To train the model, run the `train.py` with the appropriate GPU.      
 
 ### LT-Model (Less Toxic) checkpoint
-`/ocean/projects/cis250219p/shared/checkpoint/mistral`
+`/ocean/projects/cis250219p/shared/checkpoint/mistralai`
 
 | Model                     | Toxicity |
 |---------------------------|----------|
@@ -44,7 +44,7 @@ To train the model, run the `train.py` with the appropriate GPU.
 
 
 ### MT-Model (More Toxic) checkpoint
-`/ocean/projects/cis250219p/shared/checkpoint2/mistral`
+`/ocean/projects/cis250219p/shared/checkpoint2/mistralai`
 
 ## Stage 2 - Self Correction DPO
 > TBD   

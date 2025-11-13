@@ -26,7 +26,7 @@ def main():
     flag = MODEL_CONFIG['flag']
 
     if LLM_model == 'mistral':
-        model_name = "mistrai/Mistral-7B-Instruct-v0.2"
+        model_name = "mistralai/Mistral-7B-Instruct-v0.2"
     elif LLM_model == 'qwen':
         model_name = "Qwen/Qwen2.5-7B-Instruct"
     elif LLM_model == 'llama':
@@ -148,7 +148,7 @@ def main():
     # =============================================================================
 
     if LLM_model == 'mistral':
-        model_name = "/ocean/projects/cis250219p/shared/checkpoint/mistral/Mistral-7B-Instruct-v0.2"
+        model_name = "/ocean/projects/cis250219p/shared/checkpoint/mistralai/Mistral-7B-Instruct-v0.2"
     # elif LLM_model == 'qwen':
     #     model_name = "Qwen/Qwen2.5-7B-Instruct"
     # elif LLM_model == 'llama':
