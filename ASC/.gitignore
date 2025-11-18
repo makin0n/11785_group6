@@ -1,0 +1,67 @@
+# Environment variables
+.env
+*.env
+
+# API / SBATCH file 
+api_key
+config_mistral.py
+config.py
+secrets.py
+run.sbatch
+dataset_info.py
+env.txt
+
+# Model checkpoints and outputs
+trainer_output/
+final_checkpoint/
+mistral-7B-instruct-dpo/
+*.bin
+*.safetensors
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+log/
+
+# Wandb
+wandb/

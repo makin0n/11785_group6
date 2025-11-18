@@ -29,6 +29,14 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# API / Seohyun_Setting
+env.txt
+baseline_llama.sbatch
+v100.sbatch
+h100.sbatch
+wadb/
+
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -208,3 +216,4 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
