@@ -37,14 +37,16 @@ To train the model, run the `train.py` with the appropriate GPU.
 ### LT-Model (Less Toxic) checkpoint
 `/ocean/projects/cis250219p/shared/checkpoint/mistralai`
 
-| Model                     | Toxicity |
-|---------------------------|----------|
-| Original Model            | 0.0041   |
-| Trained DPO Model         | 0.0020   |
-
 
 ### MT-Model (More Toxic) checkpoint
 `/ocean/projects/cis250219p/shared/checkpoint2/mistralai`
+
+| Model                     | Toxicity |
+|---------------------------|----------|
+| Original Model            | 0.0041   |
+| Trained DPO LT-Model      | 0.0020   |    
+| Trained DPO Mt-Model      | 0.0028   |    
+
 
 ## Stage 2 - Self Correction DPO
 > TBD   
