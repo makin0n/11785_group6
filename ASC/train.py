@@ -100,48 +100,48 @@ def main():
     # DPO Training 
     # =============================================================================
 
-    # sample_texts = []
-    # for i in range(min(100, len(eval_dataset))):
-    #     sample_texts.append(eval_dataset[i]['prompt'])
+    sample_texts = []
+    for i in range(min(100, len(eval_dataset))):
+        sample_texts.append(eval_dataset[i]['prompt'])
 
 
-    # tokenizer = AutoTokenizer.from_pretrained(model_name)
-    # tokenizer.pad_token = tokenizer.eos_token
-    # tokenizer.padding_side = "left"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "left"
 
-    # dpo_wrapper = DPOTrainerWrapper(
-    #     model_name=model_name,
-    #     tokenizer=tokenizer,
-    #     train_dataset=train_dataset,
-    #     eval_dataset=eval_dataset,
-    #     training_config=TRAINING_CONFIG,
-    #     lora_config=LORA_CONFIG,
-    #     model_config=MODEL_CONFIG,
-    #     use_ddp=use_ddp,
-    #     rank=rank,
-    #     world_size=world_size,
-    #     local_rank=local_rank,
-    #     checkpoint_dir=MODEL_CONFIG.get('checkpoint_dir'),
-    #     checkpoint_dir2=MODEL_CONFIG.get('checkpoint_dir2')
-    # )
+    dpo_wrapper = DPOTrainerWrapper(
+        model_name=model_name,
+        tokenizer=tokenizer,
+        train_dataset=train_dataset,
+        eval_dataset=eval_dataset,
+        training_config=TRAINING_CONFIG,
+        lora_config=LORA_CONFIG,
+        model_config=MODEL_CONFIG,
+        use_ddp=use_ddp,
+        rank=rank,
+        world_size=world_size,
+        local_rank=local_rank,
+        checkpoint_dir=MODEL_CONFIG.get('checkpoint_dir'),
+        checkpoint_dir2=MODEL_CONFIG.get('checkpoint_dir2')
+    )
 
-    # dpo_wrapper.create_trainer()  ## // 확인 중
-    # dpo_wrapper.train(add_kl_callback=True, sample_texts=sample_texts)
-    # dpo_wrapper.save_checkpoint()
+    dpo_wrapper.create_trainer()  ## // 확인 중
+    dpo_wrapper.train(add_kl_callback=True, sample_texts=sample_texts)
+    dpo_wrapper.save_checkpoint()
     
-    # if not use_ddp or rank == 0:
-    #     dpo_wrapper.merge_and_save_model()
+    if not use_ddp or rank == 0:
+        dpo_wrapper.merge_and_save_model()
     
-    # print("Train & Save successfully!")
+    print("Train & Save successfully!")
     
-    # if use_ddp:
-    #     dist.barrier()
-    #     print(f"Rank {rank}: Ready to destroy process group")
-    #     dist.destroy_process_group()
-    #     print(f"Rank {rank}: Process group destroyed")
+    if use_ddp:
+        dist.barrier()
+        print(f"Rank {rank}: Ready to destroy process group")
+        dist.destroy_process_group()
+        print(f"Rank {rank}: Process group destroyed")
     
-    # if not use_ddp or rank == 0:
-    #     wandb.finish()
+    if not use_ddp or rank == 0:
+        wandb.finish()
 
     # =============================================================================
     # DPO Evaluate 
