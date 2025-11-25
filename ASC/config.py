@@ -13,10 +13,10 @@ API_CONFIG = {
 
 # Model
 MODEL_CONFIG = {
-    'flag' : "MT", # [MT:More Toxic, LT:Less Toxic]
+    'flag' : "LT", # [MT:More Toxic, LT:Less Toxic]
     'model_name': "biomistral", # LLM = [mistral, qwen, llama, biomistral]
-    'checkpoint_dir': f"/ocean/projects/cis250219p/shared/checkpoint", # DPO Trainer Checkpoint
-    'checkpoint_dir2': f"/ocean/projects/cis250219p/shared/checkpoint2", # DPO Trainer Checkpoint (reverse_model)
+    'checkpoint_dir': f"/ocean/projects/cis250219p/shared/checkpoint_lt", # DPO Trainer Checkpoint
+    'checkpoint_dir2': f"/ocean/projects/cis250219p/shared/checkpoint_mt", # DPO Trainer Checkpoint (reverse_model)
 }
 
 # Training

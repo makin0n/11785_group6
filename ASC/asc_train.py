@@ -33,10 +33,10 @@ def main():
     
     # path to M_LT
     #BASE_MODEL_PATH = "/ocean/projects/cis250219p/shared/checkpoint/mistralai/Mistral-7B-Instruct-v0.2"
-    BASE_MODEL_PATH = "/ocean/projects/cis250219p/shared/checkpoint/biomistralai/BioMistral/BioMistral-7B"
+    BASE_MODEL_PATH = "/ocean/projects/cis250219p/shared/checkpoint_lt"
 
     # output directory for trained model
-    OUTPUT_DIR = "/ocean/projects/cis250219p/shared/asc_checkpoint"
+    OUTPUT_DIR = "/ocean/projects/cis250219p/shared/checkpoint_asc"
 
     # model
     flag = "ASC_Phase2" 
@@ -70,7 +70,7 @@ def main():
         if 'wandb_token' in API_CONFIG:
             wandb.login(key=API_CONFIG['wandb_token'])
 
-        run_name = f'ASC_Train_{flag}_Ep{NUM_EPOCHS}'
+        run_name = f'ASC_{model_name}_Ep{NUM_EPOCHS}_{flag}'
 
         wandb.init(
             project="IDL_11785_group6",

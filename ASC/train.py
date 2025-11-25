@@ -1,3 +1,4 @@
+import sys
 import os
 import gc
 import torch
@@ -23,7 +24,12 @@ warnings.filterwarnings("ignore")
 
 def main():
     LLM_model = MODEL_CONFIG['model_name']
-    flag = MODEL_CONFIG['flag']
+    #flag = MODEL_CONFIG['flag']
+
+    if len(sys.argv) > 1:
+        flag = sys.argv[1] #LT or MT
+    else:
+        flag = MODEL_CONFIG['flag'] 
 
     if LLM_model == 'mistral':
         model_name = "mistralai/Mistral-7B-Instruct-v0.2"
