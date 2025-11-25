@@ -31,7 +31,8 @@ def main():
         model_name = "Qwen/Qwen2.5-7B-Instruct"
     elif LLM_model == 'llama':
         model_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
-
+    elif LLM_model == 'biomistral':
+        model_name = "BioMistral/BioMistral-7B"
 
     # =============================================================================
     # SETUP / WANDB
