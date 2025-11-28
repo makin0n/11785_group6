@@ -29,11 +29,12 @@ def main():
     TRAIN_RATIO = 0.9                 # Training data ratio (0.9 = 90% Train, 10% Test)
     
     # 2. data/model paths
-    DATA_PATH = "/ocean/projects/cis250219p/shared/dataset/stage2_med_pairs_qwen_all_new.jsonl" 
-    
+    #DATA_PATH = "/ocean/projects/cis250219p/shared/dataset/stage2_med_pairs_biomistral_final.jsonl" 
+    DATA_PATH = "/ocean/projects/cis250219p/sunagawa/11785_group6/ASC/stage2_med_pairs_biomistral_final.jsonl" 
+
     # path to M_LT
     #BASE_MODEL_PATH = "/ocean/projects/cis250219p/shared/checkpoint/mistralai/Mistral-7B-Instruct-v0.2"
-    BASE_MODEL_PATH = "/ocean/projects/cis250219p/shared/checkpoint_lt"
+    BASE_MODEL_PATH = "/ocean/projects/cis250219p/shared/checkpoint_lt/BioMistral/BioMistral-7B"
 
     # output directory for trained model
     OUTPUT_DIR = "/ocean/projects/cis250219p/shared/checkpoint_asc"

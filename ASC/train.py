@@ -116,6 +116,23 @@ def main():
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "left"
 
+    path_lt = MODEL_CONFIG.get('checkpoint_dir')   # .../checkpoint_lt
+    path_mt = MODEL_CONFIG.get('checkpoint_dir2')  # .../checkpoint_mt
+
+    if flag == "MT":
+        target_ckpt_dir_for_training = path_mt
+        target_ckpt_dir_for_saving   = path_mt
+    else:
+        # LTモード（通常）の場合：
+        target_ckpt_dir_for_training = path_lt
+        target_ckpt_dir_for_saving   = path_mt
+
+    
+    if not use_ddp or rank == 0:
+        print(f"[{flag} MODE] Training Output Dir: {target_ckpt_dir_for_training}")
+        if flag == "MT":
+            print(f"[{flag} MODE] Final Save Dir:    {target_ckpt_dir_for_saving}")
+
     dpo_wrapper = DPOTrainerWrapper(
         model_name=model_name,
         tokenizer=tokenizer,
@@ -128,8 +145,8 @@ def main():
         rank=rank,
         world_size=world_size,
         local_rank=local_rank,
-        checkpoint_dir=MODEL_CONFIG.get('checkpoint_dir'),
-        checkpoint_dir2=MODEL_CONFIG.get('checkpoint_dir2')
+        checkpoint_dir=target_ckpt_dir_for_training,
+        checkpoint_dir2=target_ckpt_dir_for_saving
     )
 
     dpo_wrapper.create_trainer()  ## // 확인 중
@@ -156,10 +173,11 @@ def main():
 
     if LLM_model == 'mistral':
         model_name = "/ocean/projects/cis250219p/shared/checkpoint2/mistralai/Mistral-7B-Instruct-v0.2"
-    # elif LLM_model == 'qwen':
-    #     model_name = "Qwen/Qwen2.5-7B-Instruct"
-    # elif LLM_model == 'llama':
-    #     model_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+    elif LLM_model == 'biomistral':
+        if flag == "MT":
+            model_name = f"{MODEL_CONFIG.get('checkpoint_dir2')}/BioMistral/BioMistral-7B"
+        else:
+            model_name = f"{MODEL_CONFIG.get('checkpoint_dir')}/BioMistral/BioMistral-7B"
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     tokenizer.pad_token = tokenizer.eos_token
