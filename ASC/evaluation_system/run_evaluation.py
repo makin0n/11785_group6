@@ -23,8 +23,8 @@ def parse_args():
                        default='/ocean/projects/cis250219p/shared/checkpoint')
     parser.add_argument('--checkpoint_dir2', type=str,
                        default='/ocean/projects/cis250219p/shared/checkpoint2')
-    parser.add_argument('--use_gpt4', action='store_true', default=True)
-    parser.add_argument('--no_gpt4', action='store_true')
+    parser.add_argument('--use_gemini', action='store_true', default=True)
+    parser.add_argument('--no_gemini', action='store_true')
     parser.add_argument('--output_dir', type=str, default=None)
     parser.add_argument('--metrics', type=str, nargs='+', default=['all'],
                        choices=['all', 'toxicity', 'safety', 'helpfulness', 'quality'])
@@ -62,7 +62,7 @@ def main():
     evaluator = ComprehensiveEvaluator(
         model_name_or_path=str(model_path),
         model_config=model_config,
-        use_gpt4=(args.use_gpt4 and not args.no_gpt4),
+        use_gemini=(args.use_gemini and not args.no_gemini),
         output_dir=args.output_dir
     )
     

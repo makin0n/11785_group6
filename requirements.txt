@@ -55,6 +55,7 @@ multiprocess==0.70.15
 networkx==3.3
 nlp==0.4.0
 numpy==1.26.4
+openai>=1.0.0 # Added openai for evaluations
 packaging==25.0
 pandas==2.3.3
 peft==0.17.1

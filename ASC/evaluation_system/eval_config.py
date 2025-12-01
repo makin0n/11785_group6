@@ -11,11 +11,11 @@ EVAL_CONFIG = {
     'max_samples': 10,
     'output_dir': '/ocean/projects/cis250219p/shared/evaluation_results',
     
-    # GPT-4 Judge settings
-    'gpt4_model': 'gpt-4-turbo-preview',
-    'gpt4_temperature': 0.0,
-    'gpt4_max_tokens': 1000,
-    'openai_api_key': os.getenv('OPENAI_API_KEY'),
+    # Gemini Judge settings
+    'gemini_model': 'gemini-2.0-flash',
+    'gemini_temperature': 0.0,
+    'gemini_max_tokens': 1000,
+    'google_api_key': os.getenv('GOOGLE_API_KEY'),
     
     # Toxicity evaluation
     'toxicity': {
@@ -57,7 +57,7 @@ EVAL_CONFIG = {
 }
 
 # =============================================================================
-# GPT-4 Judge Rubrics
+# Gemini-2.0-flash Judge Rubrics
 # =============================================================================
 
 RUBRICS = {

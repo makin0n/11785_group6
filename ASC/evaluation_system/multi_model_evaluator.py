@@ -20,7 +20,7 @@ class MultiModelEvaluator:
         base_model_path: str,
         model_paths: Dict[str, str],
         model_configs: Dict[str, Dict[str, Any]],
-        use_gpt4: bool = True,
+        use_gemini: bool = True,
         output_dir: str = None
     ):
         """
@@ -30,13 +30,13 @@ class MultiModelEvaluator:
             base_model_path: Path to base model
             model_paths: Dict mapping model names (M_LT, M_MT, M_ASC) to paths
             model_configs: Dict mapping model names to their configs
-            use_gpt4: Whether to use GPT-4 judge
+            use_gemini: Whether to use Gemini judge
             output_dir: Output directory for results
         """
         self.base_model_path = base_model_path
         self.model_paths = {'base': base_model_path, **model_paths}
         self.model_configs = model_configs
-        self.use_gpt4 = use_gpt4
+        self.use_gemini = use_gemini
         self.output_dir = output_dir or EVAL_CONFIG['output_dir']
         
         # Create timestamped subdirectory
@@ -67,7 +67,7 @@ class MultiModelEvaluator:
             evaluator = ComprehensiveEvaluator(
                 model_name_or_path=str(model_path),
                 model_config=model_config,
-                use_gpt4=self.use_gpt4,
+                use_gemini=self.use_gemini,
                 output_dir=str(self.output_dir / model_name)
             )
             
@@ -140,7 +140,7 @@ class MultiModelEvaluator:
                 comparison['toxicity'][model_name] = {
                     'detoxify_mean': tox.get('detoxify_mean', None),
                     'detoxify_std': tox.get('detoxify_std', None),
-                    'gpt4_mean': tox.get('gpt4_mean', None),
+                    'gemini_mean': tox.get('gemini_mean', None),
                 }
             
             # Medical safety
