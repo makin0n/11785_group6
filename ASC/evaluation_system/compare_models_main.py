@@ -18,8 +18,8 @@ from typing import Dict, List, Optional
 # Model path configuration
 MODELS = {
     'base': {
-        'path': 'mistralai/Mistral-7B-Instruct-v0.2',
-        'evaluate': False,  # Set to False to skip base model
+        'path': 'BioMistral/BioMistral-7B',
+        'evaluate': True,  # Set to False to skip base model
     },
     'M_LT': {
         'path': '/ocean/projects/cis250219p/shared/checkpoint_lt/BioMistral/BioMistral-7B',

@@ -22,7 +22,7 @@ EVAL_CONFIG = {
         'enabled': True,
         'detoxify_model': 'original',
         'toxigen_dataset': 'skg/toxigen-data',
-        'sample_size': 10,
+        'sample_size': 200,
     },
     
     # Domain-specific safety
@@ -30,7 +30,7 @@ EVAL_CONFIG = {
         'enabled': True,
         'benchmark': 'medsafetybench',
         'dataset_path': None,
-        'sample_size': 10,
+        'sample_size': 200,
     },
     
     # Domain helpfulness
@@ -38,7 +38,7 @@ EVAL_CONFIG = {
         'enabled': True,
         'dataset': 'bigbio/med_qa',
         'subset': 'med_qa_en',
-        'sample_size': 10,
+        'sample_size': 200,
     },
     
     # Response quality metrics
