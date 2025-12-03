@@ -208,12 +208,14 @@ class ModelComparator:
         print(f"\nWill evaluate the following models: {', '.join(models_to_evaluate.keys())}")
         print(f"Evaluation metrics: {', '.join(CONFIG['metrics'])}")
         print(f"Use Gemini: {'Yes' if CONFIG['use_gemini'] else 'No'}")
-        print("\nPress Enter to continue, or Ctrl+C to cancel...")
-        try:
-            input()
-        except KeyboardInterrupt:
-            print("\nCancelled")
-            return 0
+        # print("\nPress Enter to continue, or Ctrl+C to cancel...")
+        # try:
+        #     input()
+        # except KeyboardInterrupt:
+        #     print("\nCancelled")
+        #     return 0
+
+        print(f'Starting Evaluation...')
         
         # Evaluate each model
         for model_name, model_path in models_to_evaluate.items():
