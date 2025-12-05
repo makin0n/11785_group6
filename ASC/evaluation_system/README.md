@@ -5,8 +5,7 @@ Evaluate and compare biomedical language models on toxicity, safety, and helpful
 ## Setup
 
 ```bash
-# export OPENAI_API_KEY="your-openai-api-key"
-export GOOGLE_API_KEY="your-api-key-here"
+export OPENAI_API_KEY="your-openai-api-key"
 export HUGGINGFACE_TOKEN="your-hf-token"
 ```
 

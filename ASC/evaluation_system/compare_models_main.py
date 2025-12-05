@@ -38,7 +38,7 @@ MODELS = {
 # Evaluation configuration
 CONFIG = {
     'model_name': 'biomistral',
-    'use_gemini': True,        # Whether to use Gemini judge (requires API key and costs money)
+    'use_llm': True,        # Whether to use llm judge (requires API key and costs money)
     'metrics': ['all'],  # Metrics to evaluate
     
     # Example configurations:
@@ -63,7 +63,7 @@ class ModelComparator:
     def setup_output_dir(self):
         """Create output directory structure"""
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        print(f"\nV Created output directory: {self.output_dir}")
+        print(f"\n✓ Created output directory: {self.output_dir}")
     
     def validate_model(self, model_name: str, model_info: Dict) -> bool:
         """Validate single model configuration"""
@@ -107,8 +107,8 @@ class ModelComparator:
             '--metrics', *CONFIG['metrics'],
         ]
         
-        if not CONFIG['use_gemini']:
-            cmd.append('--no_gemini')
+        if not CONFIG['use_llm']:
+            cmd.append('--no_llm')
         
         print(f"Command: {' '.join(cmd)}\n")
         
@@ -207,15 +207,13 @@ class ModelComparator:
         # Confirm execution
         print(f"\nWill evaluate the following models: {', '.join(models_to_evaluate.keys())}")
         print(f"Evaluation metrics: {', '.join(CONFIG['metrics'])}")
-        print(f"Use Gemini: {'Yes' if CONFIG['use_gemini'] else 'No'}")
-        # print("\nPress Enter to continue, or Ctrl+C to cancel...")
-        # try:
-        #     input()
-        # except KeyboardInterrupt:
-        #     print("\nCancelled")
-        #     return 0
-
-        print(f'Starting Evaluation...')
+        print(f"Use llm: {'Yes' if CONFIG['use_llm'] else 'No'}")
+        print("\nPress Enter to continue, or Ctrl+C to cancel...")
+        try:
+            input()
+        except KeyboardInterrupt:
+            print("\nCancelled")
+            return 0
         
         # Evaluate each model
         for model_name, model_path in models_to_evaluate.items():

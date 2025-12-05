@@ -16,15 +16,15 @@ def parse_args():
     
     parser.add_argument('--model_path', type=str, required=True,
                        help='Path to the trained model or HuggingFace model name')
-    parser.add_argument('--model_name', type=str, default='mistral',
+    parser.add_argument('--model_name', type=str, default='biomistral',
                        choices=['mistral', 'qwen', 'llama', 'biomistral'])
     parser.add_argument('--flag', type=str, default='LT', choices=['LT', 'MT'])
     parser.add_argument('--checkpoint_dir', type=str, 
-                       default='/ocean/projects/cis250219p/shared/checkpoint')
+                       default='/ocean/projects/cis250219p/shared/checkpoint_lt')
     parser.add_argument('--checkpoint_dir2', type=str,
-                       default='/ocean/projects/cis250219p/shared/checkpoint2')
-    parser.add_argument('--use_gemini', action='store_true', default=True)
-    parser.add_argument('--no_gemini', action='store_true')
+                       default='/ocean/projects/cis250219p/shared/checkpoint_mt')
+    parser.add_argument('--use_llm', action='store_true', default=True)
+    parser.add_argument('--no_llm', action='store_true')
     parser.add_argument('--output_dir', type=str, default=None)
     parser.add_argument('--metrics', type=str, nargs='+', default=['all'],
                        choices=['all', 'toxicity', 'safety', 'helpfulness', 'quality'])
@@ -62,7 +62,7 @@ def main():
     evaluator = ComprehensiveEvaluator(
         model_name_or_path=str(model_path),
         model_config=model_config,
-        use_gemini=(args.use_gemini and not args.no_gemini),
+        use_llm=(args.use_llm and not args.no_llm),
         output_dir=args.output_dir
     )
     

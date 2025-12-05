@@ -8,21 +8,21 @@ from typing import Dict, Any, List
 EVAL_CONFIG = {
     # General settings
     'batch_size': 8,
-    'max_samples': 10,
+    'max_samples': 5,
     'output_dir': '/ocean/projects/cis250219p/shared/evaluation_results',
     
-    # Gemini Judge settings
-    'gemini_model': 'gemini-2.0-flash',
-    'gemini_temperature': 0.0,
-    'gemini_max_tokens': 1000,
-    'google_api_key': os.getenv('GOOGLE_API_KEY'),
+    # LLM Judge settings
+    'model': 'gemini-2.5-pro',#'LLM-turbo-preview',
+    'temperature': 0.1,
+    'max_tokens': 64000,
+    'openai_api_key': os.getenv('OPENAI_API_KEY'),
     
     # Toxicity evaluation
     'toxicity': {
         'enabled': True,
         'detoxify_model': 'original',
         'toxigen_dataset': 'skg/toxigen-data',
-        'sample_size': 200,
+        'sample_size': 5,
     },
     
     # Domain-specific safety
@@ -30,7 +30,7 @@ EVAL_CONFIG = {
         'enabled': True,
         'benchmark': 'medsafetybench',
         'dataset_path': None,
-        'sample_size': 200,
+        'sample_size': 5,
     },
     
     # Domain helpfulness
@@ -38,7 +38,7 @@ EVAL_CONFIG = {
         'enabled': True,
         'dataset': 'bigbio/med_qa',
         'subset': 'med_qa_en',
-        'sample_size': 200,
+        'sample_size': 5,
     },
     
     # Response quality metrics
@@ -57,7 +57,7 @@ EVAL_CONFIG = {
 }
 
 # =============================================================================
-# Gemini-2.0-flash Judge Rubrics
+# LLM Judge Rubrics
 # =============================================================================
 
 RUBRICS = {

@@ -10,17 +10,18 @@ from datasets import load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from detoxify import Detoxify
 
-def evaluate(model_name, model_config):
-
+def evaluate(trained_model_path, base_model_name):
+    """
     if model_config['flag'] == "MT":
         checkpoint_dir = model_config['checkpoint_dir2']
     else:
         checkpoint_dir = model_config['checkpoint_dir']
     new_model = Path(checkpoint_dir) /  model_name
+    """
 
-    tokenizer = AutoTokenizer.from_pretrained(new_model)
+    tokenizer = AutoTokenizer.from_pretrained(trained_model_path)
     model = AutoModelForCausalLM.from_pretrained(
-        new_model,
+        trained_model_path,
         dtype=torch.float16,
         device_map="auto"
     )
@@ -31,7 +32,7 @@ def evaluate(model_name, model_config):
         model.config.pad_token_id = tokenizer.pad_token_id if tokenizer.pad_token_id is not None else tokenizer.eos_token_id
     if hasattr(model.config, 'eos_token_id'):
         model.config.eos_token_id = tokenizer.eos_token_id
-    print(f"Successfully loaded model from: {new_model}")
+    print(f"Successfully loaded model from: {trained_model_path}")
 
 
     messages = [{"role": "user", "content": "What is a Large Language Model?"}]
@@ -54,8 +55,16 @@ def evaluate(model_name, model_config):
     #     max_length=200,
     # )
 
-    toxicity_dataset = load_dataset("Anthropic/hh-rlhf")
-    toxic_prompt_list = toxicity_dataset['test'].select(range(50))
+    #toxicity_dataset = load_dataset("Anthropic/hh-rlhf")
+    #toxic_prompt_list = toxicity_dataset['test'].select(range(50))
+
+    print("Loading dataset from cache...")
+    toxicity_dataset = load_dataset(
+        "Anthropic/hh-rlhf", 
+        split="test", 
+        data_dir="harmless-base"
+    )
+    toxic_prompt_list = toxicity_dataset.select(range(50))
 
     def map_initial_prompts(sample):
         return {"prompt": sample["chosen"].split("Assistant:")[0]}
@@ -73,7 +82,7 @@ def evaluate(model_name, model_config):
             temperature=0.7,
             top_p=0.9,
             num_return_sequences=1,
-            max_length=200,
+            max_length=512#200,
         )
 
         return outputs[0]["generated_text"]
@@ -108,14 +117,14 @@ def evaluate(model_name, model_config):
     # =============================================================================
 
     orig_model = AutoModelForCausalLM.from_pretrained(
-        model_name,
+        base_model_name, #model_name,
         load_in_4bit=True,
         dtype=torch.float16
     )
 
     orig_model.config.use_cache = True
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(base_model_name)
     # Align tokenizer and model config
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
