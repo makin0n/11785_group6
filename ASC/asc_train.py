@@ -8,6 +8,7 @@ import numpy as np
 from tqdm import tqdm
 from datasets import load_dataset
 from detoxify import Detoxify
+from peft import PeftModel
 
 from config import API_CONFIG, MODEL_CONFIG, TRAINING_CONFIG, LORA_CONFIG
 from utils import *
@@ -146,17 +147,60 @@ def main():
         print("Starting training...")
         
     dpo_wrapper.train(add_kl_callback=True, sample_texts=sample_texts)
+
+    # =============================================================================
+    # SAVE & MERGE
+    # =============================================================================
+    if not use_ddp or rank == 0:
+        print(f"\n>>>>>>>>> Starting Manual Save to {OUTPUT_DIR}...")
+        
+        adapter_save_path = OUTPUT_DIR
+        os.makedirs(adapter_save_path, exist_ok=True)
+        
+        dpo_wrapper.dpo_trainer.model.save_pretrained(adapter_save_path)
+        tokenizer.save_pretrained(adapter_save_path)
+        print(f"Adapter saved to: {adapter_save_path}")
+
+        del dpo_wrapper.dpo_trainer, dpo_wrapper.model
+        gc.collect()
+        torch.cuda.empty_cache()
+        
+        print("Reloading base model for merging...")
+        base_model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            return_dict=True,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            trust_remote_code=True
+        )
+        
+        print("Merging adapter...")
+        model_to_merge = PeftModel.from_pretrained(base_model, adapter_save_path)
+        merged_model = model_to_merge.merge_and_unload()
+        
+        model_filename = os.path.basename(model_name.rstrip("/"))
+        
+        final_save_path = os.path.join(OUTPUT_DIR, model_filename)
+        
+        print(f"Saving final merged model to: {final_save_path}")
+        merged_model.save_pretrained(final_save_path)
+        tokenizer.save_pretrained(final_save_path)
+        
+        print("Train & Save successfully!")
+
+    """
     dpo_wrapper.save_checkpoint()
-    
     # Merge and save model only on rank 0
     if not use_ddp or rank == 0:
         print(f"Merging and saving model to {OUTPUT_DIR}...")
         try:
-            dpo_wrapper.merge_and_save_model()
+            #dpo_wrapper.merge_and_save_model()
+            dpo_wrapper.save_checkpoint()
             print("Train & Save successfully!")
         except Exception as e:
             print(f"Error during merge/save: {e}")
-    
+    """
+
     if use_ddp:
         dist.barrier()
         print(f"Rank {rank}: Ready to destroy process group")
